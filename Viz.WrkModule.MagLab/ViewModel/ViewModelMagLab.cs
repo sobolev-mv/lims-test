@@ -35,7 +35,6 @@ namespace Viz.WrkModule.MagLab
     private int currentMeasureUnit = 1;
     private int selectedMeasureDevice;
 
-    private Int32 Qm;
     private Int32 isQm;
     private string currentSampleId = null;
     private string currentTstep = null;
