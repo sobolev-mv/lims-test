@@ -1,0 +1,32 @@
+﻿<dx:DXWindow x:Class="Viz.WrkModule.MagLab.ViewDlgStZap"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+xmlns:dxl="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
+xmlns:ruc="clr-namespace:Smv.RibbonUserUI;assembly=Smv.Prj.Core"
+Name="WinDlgDcBlMet" Height="400" Width="1080"  WindowStartupLocation="CenterScreen" ShowInTaskbar="False" ResizeMode="NoResize" Title="Коэффициенты старения и заполнения" Icon="/Viz.WrkModule.MagLab;component/Images/DlgStZap-16x16.png">
+  <dxl:LayoutControl x:Name="LayoutRoot" StretchContentVertically="True" Orientation="Vertical">
+    <dxl:LayoutGroup View="GroupBox" HorizontalAlignment="Stretch" Orientation="Vertical"  Header="Действия" ItemLabelsAlignment="Local" IsCollapsible="False">
+      <dxl:LayoutGroup View="Group" Orientation="Horizontal">
+      </dxl:LayoutGroup>
+    </dxl:LayoutGroup>
+    <dxg:GridControl Name="GcDc" ShowBorder="True" ItemsSource="{Binding MlStZap}">
+      <dxg:GridControl.View>
+        <dxg:TableView NavigationStyle="Cell" ShowGroupPanel="False" AllowGrouping="False" AllowEditing="False"/>
+      </dxg:GridControl.View>
+      <dxg:GridControl.Columns>
+        <dxg:GridColumn FieldName="SmpYear" Header="Год" MinWidth="80" Width="80" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+        <dxg:GridColumn FieldName="Qart" Header="Квартал" MinWidth="80" Width="80" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+        <dxg:GridColumn FieldName="Thicknessnominal" Header="Толщина" MinWidth="120" Width="120" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+        <dxg:GridColumn FieldName="CofStar" Header="Коэфф. старен." MinWidth="100" Width="100" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+        <dxg:GridColumn FieldName="CofZapol" Header="Коэфф заполн." MinWidth="100" Width="100" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+      </dxg:GridControl.Columns>
+    </dxg:GridControl>
+
+    <dxl:LayoutGroup View="Group" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Orientation="Horizontal">
+      <Button Width="70" Height="25" HorizontalAlignment="Right"  Margin="0,3,0,0" Content="Ok" IsDefault="True" Command="{Binding CloseWndCommand}"  CommandParameter="{Binding ElementName=WinDlgDcBlMet}" />
+    </dxl:LayoutGroup>
+  </dxl:LayoutControl> 
+</dx:DXWindow>

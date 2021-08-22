@@ -1,0 +1,87 @@
+﻿<ruc:RibbonUserControl x:Class="Viz.WrkModule.MapDefects.ViewMapDefects"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ruc="clr-namespace:Smv.RibbonUserUI;assembly=Smv.Prj.Core"
+             xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" 
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+             xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" RegName="UcMapDefects" Caption="Распеределение дефектов по поверхности рулона">
+  <ruc:RibbonUserControl.BarManagerItems>
+    <dxb:BarEditItem Name="beiLocNum" EditValue="{Binding FindLocNumText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Лок №: " Hint="Локальный номер рулона" EditWidth="170">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:TextEditSettings TextWrapping="Wrap"/>
+      </dxb:BarEditItem.EditSettings>
+      <dxb:BarEditItem.EditStyle>
+        <Style TargetType="dxe:TextEdit">
+          <Setter Property="FontSize" Value="14"/>
+          <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+      </dxb:BarEditItem.EditStyle>
+    </dxb:BarEditItem>
+    <dxb:BarEditItem Name="beiSelCoilType" EditValue="{Binding SelectedCoilType}" EditWidth="170" Content="Тех Ш:" Hint="Технологический шаг">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:ListBoxEditSettings ItemsSource="{Binding CoilType}" DisplayMember="Name" ValueMember="Id" >
+          <dxe:ListBoxEditSettings.StyleSettings>
+            <dxe:RadioListBoxEditStyleSettings/>
+          </dxe:ListBoxEditSettings.StyleSettings>
+        </dxe:ListBoxEditSettings>
+      </dxb:BarEditItem.EditSettings>
+      <dxb:BarEditItem.EditStyle>
+        <Style TargetType="dxe:ListBoxEdit">
+          <Setter Property="FontWeight" Value="Bold"/>
+          <Setter Property="Background" Value="LightSkyBlue"/>
+        </Style>
+      </dxb:BarEditItem.EditStyle>
+    </dxb:BarEditItem>
+    <dxb:BarButtonItem Name="btnBuildMap" Command="{Binding BuildMapDefectsCommand}"  Content="Показ." LargeGlyph="pack://application:,,,/Viz.WrkModule.MapDefects;Component/Images/BuildMap-32x32.png" Hint="Построить карту дефектов." />
+    <dxb:BarEditItem Name="beiScaleX" Content="По ширине:" EditValue="{Binding ScaleX, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Hint="Масштаб по ширине" EditWidth="60">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:SpinEditSettings MinValue="15" MaxValue="100"  MaskType="Numeric"  Mask="d" MaskUseAsDisplayFormat="True"/>
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+    <dxb:BarEditItem Name="beiScaleY" Content="По высоте:" EditValue="{Binding ScaleY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Hint="Масштаб по высоте" EditWidth="60">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:SpinEditSettings MinValue="15" MaxValue="100"  MaskType="Numeric"  Mask="d" MaskUseAsDisplayFormat="True"/>
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+    <dxb:BarButtonItem Name="btnApScaleY" Command="{Binding ScaleYCommand}" Content="      Применить       " Glyph="pack://application:,,,/Viz.WrkModule.MapDefects;Component/Images/Apply-16x16.png" Description="New blank document." Hint="Применить масштаб к текущей карте дефектов." />
+    <dxb:BarButtonItem Name="btnPrintMap" Command="{Binding PrintMapDefectsCommand}" Content="Печать" LargeGlyph="pack://application:,,,/Viz.WrkModule.MapDefects;Component/Images/PrintMap-32x32.png" Hint="Распечатать карту дефектов." />
+    <dxb:BarButtonItem Name="btnQuitxyz" Content="Выход" Tag="CloseUserControl" LargeGlyph="pack://application:,,,/Viz.WrkModule.MapDefects;Component/Images/close-32x32.png" Description="New blank document." Hint="Закончить работу с АРМ Карта дефектов." />
+  </ruc:RibbonUserControl.BarManagerItems>
+
+  <ruc:RibbonUserControl.UserPages>
+    <dxr:RibbonPage Caption="Дефекты">
+      <dxr:RibbonPageGroup Name="rpgCoil" Caption="Рулон" AllowCollapse="False">
+        <dxb:BarEditItemLink BarItemName="beiLocNum"/>
+        <dxb:BarEditItemLink BarItemName="beiSelCoilType"/>
+        <dxb:BarButtonItemLink BarItemName="btnBuildMap" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+      <dxr:RibbonPageGroup Name="rpgScaleY" Caption="Масштаб %" AllowCollapse="False">
+        <dxb:BarEditItemLink BarItemName="beiScaleX" /> 
+        <dxb:BarEditItemLink BarItemName="beiScaleY" />
+        <dxb:BarButtonItemLink BarItemName="btnApScaleY" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+      <dxr:RibbonPageGroup Name="rpgAction" Caption="Операции" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnPrintMap" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup> 
+      <dxr:RibbonPageGroup Name="rpgQuit" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnQuitxyz" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+    </dxr:RibbonPage>
+  </ruc:RibbonUserControl.UserPages>
+  <dxc:DXTabControl>
+    <dxc:DXTabControl.View>
+      <dxc:TabControlScrollView HeaderLocation="Left"/>
+    </dxc:DXTabControl.View>
+    <dxc:DXTabItem Header="Страница 1">
+      <Canvas Name="Cnvs1" ClipToBounds="True" SnapsToDevicePixels="True" Background="White"/>  
+    </dxc:DXTabItem>
+    <dxc:DXTabItem Header="Страница 2">
+      <Canvas Name="Cnvs2" ClipToBounds="True" SnapsToDevicePixels="True" Background="White"/>
+    </dxc:DXTabItem>
+  </dxc:DXTabControl>
+</ruc:RibbonUserControl>

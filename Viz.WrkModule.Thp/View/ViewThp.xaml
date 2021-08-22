@@ -1,0 +1,163 @@
+﻿<ruc:RibbonUserControl x:Class="Viz.WrkModule.Thp.ViewThp"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+  xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" 
+  xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+  xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+  xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+  xmlns:dxl="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  
+  xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"   
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"                   
+  xmlns:ruc="clr-namespace:Smv.RibbonUserUI;assembly=Smv.Prj.Core" 
+  xmlns:conv="clr-namespace:Viz.WrkModule.Thp;assembly="  
+  mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300" RegName="UcThp" Caption="Работа с технологическими письмами">
+  <ruc:RibbonUserControl.Resources>
+    <conv:IntToImageConverter x:Key="IntToImageConverter" />
+    <conv:IntToBoolConverter x:Key="IntToBoolConverter" />
+  </ruc:RibbonUserControl.Resources>
+
+  <ruc:RibbonUserControl.BarManagerItems>
+    <dxb:BarEditItem Name="beiDateBeginThp" Content="Дата Н:" EditValue="{Binding DateBeginThp}" Hint="Начальная дата ТхП для выборки" EditWidth="90">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:DateEditSettings TextWrapping="Wrap" IsTextEditable="False" />
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+
+    <dxb:BarEditItem Name="beiDateEndThp" Content="Дата К:" EditValue="{Binding DateEndThp}" Hint="Конечная дата  ТхП для выборки" EditWidth="90">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:DateEditSettings TextWrapping="Wrap" IsTextEditable="False" />
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+    
+    <dxb:BarButtonItem Name="btnQuitxyz" Content="Выход" Tag="CloseUserControl" LargeGlyph="pack://application:,,,/Viz.WrkModule.Thp;Component/Images/close-32x32.png"  Description="New blank document." Hint="Закончить работу с АРМ Технологические письма." />
+    <dxb:BarButtonItem Name="btnShowThp" Content="Показать ТхП" Command="{Binding ShowDataCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.Thp;Component/Images/View-32x32.png" Hint="Получить список ТхП за выбранный период." />
+    <dxb:BarButtonItem Name="btnSaveData" Content="Сохр." Command="{Binding SaveDataCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.Thp;Component/Images/save-32x32.png" Hint="Сохранить измененные данные в БД." />
+    <dxb:BarButtonItem Name="btnSaveDocToDb" Command="{Binding SaveBlobCommand}"  CommandParameter="0" Content="ТхП в БД" Glyph="pack://application:,,,/Viz.WrkModule.Thp;Component/Images/SaveToDb-16x16.png" Hint="Сохранить ТхП в БД." />
+    <dxb:BarButtonItem Name="btnOpenDocFromDb" Command="{Binding OpenBlobCommand}"  CommandParameter="0" Content="ТхП из БД" Glyph="pack://application:,,,/Viz.WrkModule.Thp;Component/Images/OpenFromDb-16x16.png" Hint="Открыть ТхП из БД." />
+    <dxb:BarButtonItem Name="btnAddDetailRecord"  Content="Добавить подчин." Command="{Binding AddDetailCommand}" Glyph="pack://application:,,,/Viz.WrkModule.Thp;Component/Images/add-16x16.png" Hint="Добавить новую подчиненную запись в БД." />
+    <dxb:BarButtonItem Name="btnSaveProtToDb"  Command="{Binding SaveBlobCommand}" CommandParameter="1" Content="Прот в БД" Glyph="pack://application:,,,/Viz.WrkModule.Thp;Component/Images/SaveToDb-16x16.png" Hint="Сохранить протокол в БД." />
+    <dxb:BarButtonItem Name="btnOpenProtFromDb" Command="{Binding OpenBlobCommand}" CommandParameter="1" Content="Прот из БД" Glyph="pack://application:,,,/Viz.WrkModule.Thp;Component/Images/OpenFromDb-16x16.png" Hint="Открыть протокол из БД." />
+  </ruc:RibbonUserControl.BarManagerItems>
+  <ruc:RibbonUserControl.UserPages>
+    <dxr:RibbonPage Caption="Тех.письма">
+      <dxr:RibbonPageGroup Name="rpgShow" Caption="Просмотр" AllowCollapse="False">
+        <dxb:BarEditItemLink BarItemName="beiDateBeginThp" />
+        <dxb:BarEditItemLink BarItemName="beiDateEndThp" />
+        <dxb:BarButtonItemLink BarItemName="btnShowThp" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+
+      <dxr:RibbonPageGroup Name="rpgAction" Caption="Операции" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnSaveData" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnSaveDocToDb" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnOpenDocFromDb" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnAddDetailRecord" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnSaveProtToDb" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnOpenProtFromDb" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+
+      <dxr:RibbonPageGroup Name="rpgQuit" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnQuitxyz" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+    </dxr:RibbonPage>
+  </ruc:RibbonUserControl.UserPages>
+  <dxg:GridControl Name="gcThpData" ShowBorder="False" ItemsSource="{Binding Path=Thp}">
+    <dxg:GridControl.View>
+      <dxg:TableView NavigationStyle="Cell" AllowEditing="True" NewItemRowPosition="Top" IsDetailButtonVisibleBinding="{Binding Row.Cdtl, Converter={StaticResource IntToBoolConverter}}" />
+    </dxg:GridControl.View>
+    <dxg:GridControl.Columns>
+      <dxg:GridColumn FieldName="Id" Header="ID" MinWidth="65" Width="65" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="Ldoc" Header="ТхП" MinWidth="30" Width="30">
+        <dxg:GridColumn.CellTemplate>
+          <DataTemplate>
+            <StackPanel DataContext="{Binding RowData.Row}">
+              <Image Source="{Binding Path=Ldoc, Converter={StaticResource IntToImageConverter}}" Stretch="None" Width="15" Height="15" />
+            </StackPanel>
+          </DataTemplate>
+        </dxg:GridColumn.CellTemplate>
+      </dxg:GridColumn>
+      <dxg:GridColumn FieldName="Lprot" Header="Прт" MinWidth="30" Width="30">
+        <dxg:GridColumn.CellTemplate>
+          <DataTemplate>
+            <StackPanel DataContext="{Binding RowData.Row}">
+              <Image Source="{Binding Path=Lprot, Converter={StaticResource IntToImageConverter}}" Stretch="None" Width="15" Height="15" />
+            </StackPanel>
+          </DataTemplate>
+        </dxg:GridColumn.CellTemplate>
+      </dxg:GridColumn>
+      <dxg:GridColumn FieldName="IsCancel" Header="О" MinWidth="20" Width="20" EditSettings="{dxe:CheckSettings}"/>
+      <dxg:GridColumn FieldName="CodeThp" Header="Полн. № ТхП" MinWidth="90" Width="90" />
+      <dxg:GridColumn FieldName="NumThp" Header="Порядк. № ТхП" MinWidth="90" Width="90" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}"/>
+      <dxg:GridColumn FieldName="DateThp" Header="Дата ТхП" MinWidth="100" Width="100" EditSettings="{dxe:DateSettings MaskType=DateTime, Mask=d, MaskUseAsDisplayFormat=True}"/>
+      <dxg:GridColumn FieldName="DateBeg" Header="Дата Нач ТхП" MinWidth="100" Width="100" EditSettings="{dxe:DateSettings MaskType=DateTime, Mask=d, MaskUseAsDisplayFormat=True}"/>
+      <dxg:GridColumn FieldName="DateEnd" Header="Дата Окон ТхП" MinWidth="100" Width="100" EditSettings="{dxe:DateSettings MaskType=DateTime, Mask=d, MaskUseAsDisplayFormat=True}"/>
+      <dxg:GridColumn FieldName="TypeThp" Header="Тип ТхП" MinWidth="90" Width="90" >
+        <dxg:GridColumn.EditSettings>
+          <dxe:ComboBoxEditSettings IsTextEditable="False">
+            <dxe:ComboBoxEditSettings.Items>
+              <sys:String>О</sys:String>
+              <sys:String>Т</sys:String>
+              <sys:String>Р</sys:String>
+            </dxe:ComboBoxEditSettings.Items>
+          </dxe:ComboBoxEditSettings>
+        </dxg:GridColumn.EditSettings>
+      </dxg:GridColumn>
+      <dxg:GridColumn FieldName="Ts" Header="Передел" MinWidth="150" Width="150" />
+      <dxg:GridColumn FieldName="SubjThp" Header="Тема ТхП" MinWidth="300" Width="300" />
+      <dxg:GridColumn FieldName="NoteThp" Header="Примечание ТхП" MinWidth="200" Width="200" />
+    </dxg:GridControl.Columns>
+    <dxg:GridControl.DetailDescriptor>
+      <dxg:DataControlDetailDescriptor>
+        <dxg:DataControlDetailDescriptor.DataControl>
+          <dxg:GridControl Name="gcThpDetailData">
+            <dxg:GridControl.View>
+              <dxg:TableView ShowGroupPanel="False"/>
+            </dxg:GridControl.View>
+            <dxg:GridControl.Columns>
+              <dxg:GridColumn FieldName="Id" Header="ID" MinWidth="65" Width="65" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" ReadOnly="True"/>
+              <dxg:GridColumn FieldName="Ldoc" Header="ТхП" MinWidth="30" Width="30">
+                <dxg:GridColumn.CellTemplate>
+                  <DataTemplate>
+                    <StackPanel DataContext="{Binding RowData.Row}">
+                      <Image Source="{Binding Path=Ldoc, Converter={StaticResource IntToImageConverter}}" Stretch="None" Width="15" Height="15" />
+                    </StackPanel>
+                  </DataTemplate>
+                </dxg:GridColumn.CellTemplate>
+              </dxg:GridColumn>
+              <dxg:GridColumn FieldName="Lprot" Header="Прт" MinWidth="30" Width="30">
+                <dxg:GridColumn.CellTemplate>
+                  <DataTemplate>
+                    <StackPanel DataContext="{Binding RowData.Row}">
+                      <Image Source="{Binding Path=Lprot, Converter={StaticResource IntToImageConverter}}" Stretch="None" Width="15" Height="15" />
+                    </StackPanel>
+                  </DataTemplate>
+                </dxg:GridColumn.CellTemplate>
+              </dxg:GridColumn>
+              <dxg:GridColumn FieldName="IsCancel" Header="О" MinWidth="20" Width="20" EditSettings="{dxe:CheckSettings}"/>
+              <dxg:GridColumn FieldName="CodeThp" Header="Полн. № ТхП" MinWidth="90" Width="90" />
+              <dxg:GridColumn FieldName="NumThp" Header="Порядк. № ТхП" MinWidth="90" Width="90" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}"/>
+              <dxg:GridColumn FieldName="DateThp" Header="Дата ТхП" MinWidth="100" Width="100" EditSettings="{dxe:DateSettings MaskType=DateTime, Mask=d, MaskUseAsDisplayFormat=True}"/>
+              <dxg:GridColumn FieldName="DateBeg" Header="Дата Нач ТхП" MinWidth="100" Width="100" EditSettings="{dxe:DateSettings MaskType=DateTime, Mask=d, MaskUseAsDisplayFormat=True}"/>
+              <dxg:GridColumn FieldName="DateEnd" Header="Дата Окон ТхП" MinWidth="100" Width="100" EditSettings="{dxe:DateSettings MaskType=DateTime, Mask=d, MaskUseAsDisplayFormat=True}"/>
+              <dxg:GridColumn FieldName="TypeThp" Header="Тип ТхП" MinWidth="90" Width="90" >
+                <dxg:GridColumn.EditSettings>
+                  <dxe:ComboBoxEditSettings IsTextEditable="False">
+                    <dxe:ComboBoxEditSettings.Items>
+                      <sys:String>О</sys:String>
+                      <sys:String>Т</sys:String>
+                      <sys:String>Р</sys:String>
+                    </dxe:ComboBoxEditSettings.Items>
+                  </dxe:ComboBoxEditSettings>
+                </dxg:GridColumn.EditSettings>
+              </dxg:GridColumn>
+              <dxg:GridColumn FieldName="Ts" Header="Передел" MinWidth="150" Width="150" />
+              <dxg:GridColumn FieldName="SubjThp" Header="Тема ТхП" MinWidth="300" Width="300" />
+              <dxg:GridColumn FieldName="NoteThp" Header="Примечание ТхП" MinWidth="200" Width="200" />
+            </dxg:GridControl.Columns>
+          </dxg:GridControl>
+        </dxg:DataControlDetailDescriptor.DataControl>
+      </dxg:DataControlDetailDescriptor>
+    </dxg:GridControl.DetailDescriptor>
+ </dxg:GridControl>
+</ruc:RibbonUserControl>

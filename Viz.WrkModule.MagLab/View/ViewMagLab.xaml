@@ -1,0 +1,528 @@
+﻿<ruc:RibbonUserControl x:Class="Viz.WrkModule.MagLab.ViewMagLab" 
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" 
+xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+xmlns:dxgt="http://schemas.devexpress.com/winfx/2008/xaml/grid/themekeys"
+xmlns:dxl="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
+xmlns:ruc="clr-namespace:Smv.RibbonUserUI;assembly=Smv.Prj.Core"
+xmlns:conv="clr-namespace:Viz.WrkModule.MagLab;assembly="
+xmlns:cnv="clr-namespace:Smv.XAML.Convertors;assembly=Smv.Prj.Core" 
+xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+RegName="UcMagLab" Caption="Магнитная лаборатория">
+  <ruc:RibbonUserControl.Resources>
+    <Style x:Key="CellStyle1" TargetType="dxg:GridControl">
+      <Style.Triggers>
+        <DataTrigger>
+          <Setter Property="Background" Value="Red"/>
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+    <conv:IntToImageConverter x:Key="IntToImageConverter" />
+    <conv:SlImageConverter x:Key="SlImageConverter" />
+    <cnv:CharYn2BooleanConverter x:Key="CharYn2BooleanConverter" />
+  </ruc:RibbonUserControl.Resources>
+
+  <ruc:RibbonUserControl.BarManagerItems>
+    <!--dxb:BarButtonItem Name="btnXSamplesRowChanged" Command="{Binding SamplesRowChangedCommand}" /-->
+
+    <dxb:BarEditItem Name="beiSampleDateBegin" Content="Дата Н:" EditValue="{Binding DateSamplesBegin}" Hint="Начальная дата для выборки образцов" EditWidth="90">
+      <dxb:BarEditItem.EditSettings>
+         <dxe:DateEditSettings TextWrapping="Wrap" IsTextEditable="False" />
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+
+    <dxb:BarEditItem Name="beiSampleDateEnd" Content="Дата К:" EditValue="{Binding DateSamplesEnd}" Hint="Конечная даты для выборки образцов" EditWidth="90">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:DateEditSettings TextWrapping="Wrap" IsTextEditable="False" />
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+
+    <dxb:BarEditItem Name="beiShift" Content="Смена:" EditValue="{Binding SelectedShift}" Hint="Выбор смены" EditWidth="90">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:ComboBoxEditSettings ItemsSource="{Binding Path=(dxb:BarEditItem.BarEditItem).DataContext.Shift, RelativeSource={RelativeSource Self}}" DisplayMember="NameShift" ValueMember="Id" IsTextEditable="False"/>
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+
+    <dxb:BarEditItem Name="beiSelectFindMode" Content="Искать по:"  EditValue="{Binding FindSampleMode}" Hint="Выбор критерия поиска образцов" EditWidth="190">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:ComboBoxEditSettings ItemsSource="{Binding Path=(dxb:BarEditItem.BarEditItem).DataContext.FindMode, RelativeSource={RelativeSource Self}}" DisplayMember="NameMode" ValueMember="Id" IsTextEditable="False">
+        </dxe:ComboBoxEditSettings>
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+
+    <dxb:BarEditItem Name="beiTextFind" EditValue="{Binding FindSampleText, Mode=TwoWay}" Content="Значение: " Hint="Ввод значения поиска" EditWidth="190">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:TextEditSettings TextWrapping="Wrap"/>
+      </dxb:BarEditItem.EditSettings>
+      <dxb:BarEditItem.EditStyle>
+        <Style TargetType="dxe:TextEdit">
+          <!--Setter Property="FontSize" Value="14"/-->
+          <!--Setter Property="FontWeight" Value="Bold"/-->
+        </Style>
+      </dxb:BarEditItem.EditStyle>
+    </dxb:BarEditItem>
+
+    <dxb:BarEditItem Name="beiSelDevice" EditValue="{Binding SelectedMeasureDevice, Mode=TwoWay}" Content="Устр-во:"  Hint="Выбор измерительного устр-ва" EditWidth="190">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:ComboBoxEditSettings ItemsSource="{Binding Path=(dxb:BarEditItem.BarEditItem).DataContext.DeviceLst, RelativeSource={RelativeSource Self}}" DisplayMember="Name" ValueMember="Id"  IsTextEditable="False">
+        </dxe:ComboBoxEditSettings>
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+
+    <dxb:BarButtonItem Name="btnQuitxyz" Content="Выход" Tag="CloseUserControl" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/close-32x32.png" Description="New blank document." Hint="Закончить работу с АРМ Мaгнитная лаборатория." />
+    <dxb:BarButtonItem Name="btnShowSamples" Content="Обр-цы" Command="{Binding GetListSamplesCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Samples-32x32.png" Hint="Получить список образцов за выбранный период." />
+    <dxb:BarButtonItem Name="btnFindSamples" Content="Найти обр-цы" KeyGesture="Enter" Command="{Binding FindSamplesCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Find-32x32.png" Hint="Найти образцы по выбранному критерию." />
+    <dxb:BarButtonItem Name="btnSaveData" Content="Сохр." Command="{Binding SaveDataCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/save-32x32.png" Hint="Сохранить измененные данные в БД." />
+    <dxb:BarButtonItem Name="btnMeasureSample" Content="Измер-е обр-ца" Command="{Binding MeasureSampleDataCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/MeasureSampleUnit-32x32.png" Hint="Получить данные с установки для измерения параметров образца." />
+    <dxb:BarButtonItem Name="btnToMes" Content="Обр-ц  в MES" Command="{Binding ToMesCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/ToMes-32x32.ico" Hint="Отправить характеристики образца в MES-систему." />
+    <dxb:BarButtonItem Name="btnToEdit" Content="В измер." Command="{Binding ToBackToEditCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/SampleToEdit-32x32.png" Hint="Вернуть образец в режим измерений." />
+    <dxb:BarButtonItem Name="btnCopyProp" Command="{Binding CopyPropCommand}" Content="Копир. св-ств" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/CopySampleProp-32x32.png" Hint="Копирование свойств с одного образца на другой." />
+    <dxb:BarButtonItem Name="btnShowCalcValue" Command="{Binding ShowCalcValuesCommand}" Content="Св-ва пробы" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/ShowCalcValue-32x32.png" Hint="Просмотр свойств пробы." />
+    <dxb:BarButtonItem Name="btnDelete" Command="{Binding DeleteSampleCommand}" Content="Удалить обр-ц" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Delete-32x32.png" Hint="Удаление образца." />
+    <dxb:BarButtonItem Name="btnValidate" Command="{Binding ValidateCommand}" Content="Контр." Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Validate-16x16.png" Hint="Включить/выключить проверку заполнения характеристик." />
+    <dxb:BarButtonItem Name="btnFr20Import" Command="{Binding Fr20ImportCommand}" Content="Фр20 Импорт" Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Fr20Import-16x16.png" Hint="Импорт данных с Франклина20." />
+    <dxb:BarButtonItem Name="btnStatFlag" Command="{Binding ChangeStatFlagCommand}" Content="Искл. ПП" Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/StatFlag-16x16.png" Hint="Исключить из отчета ПП."/>
+    <dxb:BarButtonItem Name="btnS2LCheck" Command="{Binding CheckS2LCommand}" Content="Пометить Рул АВО" Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Check-32x32.png" Hint="Пометить рулон АВО для обработки лазером."/>
+    <dxb:BarButtonItem Name="btnS2LUnCheck" Command="{Binding UnCheckS2LCommand}" Content="Снять пом Рул АВО" Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Delete-32x32.png" Hint="Снять пометку у рулона АВО о обработке лазером."/>
+    <dxb:BarButtonItem Name="btnS2LCpy" Command="{Binding CopyPropS2LCommand}" Content="Копир св-ва" Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/CopySampleProp-32x32.png" Hint="Скопировать св-ва на конечный рулон обработанный лазером."/>
+    <dxb:BarButtonItem Name="btnStZap" Command="{Binding DlgStZapCommand}"  Content="Коэфф-ты" Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/DlgStZap-16x16.png" Hint="Настройка коэфф."/>
+    <dxb:BarButtonItem Name="btnMesurCof" Command="{Binding DlgMesurCofCommand}" Content="Коррекция" Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/DlgMesurCof-16x16.png" Hint="Настройка коррекции измерений."/>
+    <dxb:BarButtonItem Name="btnCopyApstProp" Command="{Binding CopyApstPropCommand}" Content="Копир Эпшт" Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/CopyApst-16x16.png" Hint="Копировать х-тики Эпштейна."/>
+    <dxb:BarButtonItem Name="btnSiemens" Command="{Binding DlgSiemensCommand}" Content="Siemens" Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Slact-16x16.png" Hint="Лист для Siemens."/>
+    <dxb:BarButtonItem Name="btnAdgRpt" Command="{Binding AdgRptCommand}" Content="Отч. адг." Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/AdgRpt-16x16.png" Hint="Отчет по адгезии."/>
+    <dxb:BarButtonItem Name="btnCopyApst4CmpCoil" Command="{Binding CopyApstCmpCoilCommand}" Content="Копир. Эпшт СР" Glyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/CopyApstCmpCoil-16x16.png" Hint="Копирование Эпштейна для составных рулонов."/>
+  </ruc:RibbonUserControl.BarManagerItems>
+
+  <ruc:RibbonUserControl.UserPages>
+    <dxr:RibbonPage Caption="Образцы">
+      <dxr:RibbonPageGroup Name="rpgShow" Caption="Просмотр" AllowCollapse="False">
+        <dxb:BarEditItemLink BarItemName="beiSampleDateBegin" />
+        <dxb:BarEditItemLink BarItemName="beiSampleDateEnd" />
+        <dxb:BarEditItemLink BarItemName="beiShift" />
+        <dxb:BarButtonItemLink BarItemName="btnShowSamples" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+
+      <dxr:RibbonPageGroup Name="rpgFind" Caption="Поиск образцов и выбор изм. устр-ва" AllowCollapse="False">
+        <dxb:BarEditItemLink BarItemName="beiSelectFindMode" />
+        <dxb:BarEditItemLink BarItemName="beiTextFind" />
+        <dxb:BarEditItemLink BarItemName="beiSelDevice" />
+        <dxb:BarButtonItemLink BarItemName="btnFindSamples" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+
+      <dxr:RibbonPageGroup Name="rpgAction" Caption="Операции" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnSaveData" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnMeasureSample" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnToMes" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnToEdit" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnCopyProp" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnShowCalcValue" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnDelete" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnValidate" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnFr20Import" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnStatFlag" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True"/>
+        <dxb:BarButtonItemLink BarItemName="btnStZap" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True"/>
+        <dxb:BarButtonItemLink BarItemName="btnMesurCof" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True"/>
+        <dxb:BarButtonItemLink BarItemName="btnCopyApstProp" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True"/>
+        <dxb:BarButtonItemLink BarItemName="btnSiemens" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True"/>
+        <dxb:BarButtonItemLink BarItemName="btnAdgRpt" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True"/>
+        <dxb:BarButtonItemLink BarItemName="btnCopyApst4CmpCoil" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True"/>
+      </dxr:RibbonPageGroup>
+
+      <dxr:RibbonPageGroup Name="rpgQuit" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnQuitxyz" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+    </dxr:RibbonPage>
+    <dxr:RibbonPage Caption="Аво->Лазер">
+      <dxr:RibbonPageGroup Name="rpgAvoLasscr" Caption="Операции" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnS2LCheck" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnS2LUnCheck" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnS2LCpy" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+    </dxr:RibbonPage>
+  </ruc:RibbonUserControl.UserPages>
+
+  <dxl:LayoutControl x:Name="LayoutRoot" StretchContentVertically="True">
+    <dxl:LayoutGroup Header="Образцы" View="GroupBox" ItemSpace="10" Width="600" HorizontalAlignment="Left" dxl:LayoutControl.AllowHorizontalSizing="True" Orientation="Vertical">
+      <dxg:GridControl Name="GcSamples" ShowBorder="True" ItemsSource="{Binding Samples}">
+        <dxg:GridControl.View>
+          <dxg:TableView NavigationStyle="Row" AllowEditing="False" />
+        </dxg:GridControl.View>
+        <dxg:GridControl.Columns>
+          <dxg:GridColumn FieldName="State" Header="Ст" MinWidth="25" Width="25">
+            <dxg:GridColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel DataContext="{Binding RowData.Row}">
+                  <Image Source="{Binding Path=State, Converter={StaticResource IntToImageConverter}}" Stretch="None" Width="17" Height="17" />
+                </StackPanel>
+              </DataTemplate>
+            </dxg:GridColumn.CellTemplate>
+          </dxg:GridColumn>
+          <!--dxg:GridColumn Name="gridColumn7" FieldName="LaserFlag" Header="Л" MinWidth="20" Width="20" EditSettings="{dxe:CheckSettings}"/-->
+          <dxg:GridColumn FieldName="SlFlg" Header="Л" MinWidth="25" Width="25">
+            <dxg:GridColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel DataContext="{Binding RowData.Row}">
+                  <Image Source="{Binding Path=SlFlg, Converter={StaticResource SlImageConverter}}" Stretch="None" Width="17" Height="17" />
+                </StackPanel>
+              </DataTemplate>
+            </dxg:GridColumn.CellTemplate>
+          </dxg:GridColumn>
+          <dxg:GridColumn FieldName="IsQm" Header="ОП" MinWidth="27" Width="27" EditSettings="{dxe:CheckSettings}"/>
+          <dxg:GridColumn FieldName="SampleNum"  Header="№ Образца" MinWidth="70" Width="70" ReadOnly="True" AllowEditing="False"/>
+          <dxg:GridColumn FieldName="Line" Header="Агр-т" MinWidth="40" Width="40" ReadOnly="True" AllowEditing="False"/>
+          <dxg:GridColumn FieldName="TestType" Header="Проба" MinWidth="40" Width="40" ReadOnly="True" AllowEditing="False"/>
+          <dxg:GridColumn FieldName="SamplePos" Header="Т" MinWidth="20" Width="20" ReadOnly="True" AllowEditing="False"/>
+          <dxg:GridColumn FieldName="SteelType" Header="Сталь" MinWidth="35" Width="35" ReadOnly="True" AllowEditing="False"/>
+          <dxg:GridColumn FieldName="ThickNessNominal" Header="Толщ" MinWidth="35" Width="35" EditSettings="{dxe:TextSettings DisplayFormat=n2}"/>
+          <dxg:GridColumn FieldName="MatLocalNumber" Header="Лок номер" MinWidth="75" Width="75"/>
+          <dxg:GridColumn FieldName="MatMarkingInfo" Header="Стенд/Рул" MinWidth="80" Width="80"/>
+          <dxg:GridColumn FieldName="DtSample" Header="Создан" MinWidth="100" Width="100" ReadOnly="True" AllowEditing="False">
+            <dxg:GridColumn.EditSettings>
+              <dxe:TextEditSettings DisplayFormat="dd.MM.yyyy HH:mm" />
+            </dxg:GridColumn.EditSettings>
+          </dxg:GridColumn>
+          <dxg:GridColumn FieldName="DtSend" Header="Отправлен" MinWidth="100" Width="100">
+            <dxg:GridColumn.EditSettings>
+              <dxe:TextEditSettings DisplayFormat="dd.MM.yyyy HH:mm" />
+            </dxg:GridColumn.EditSettings>
+          </dxg:GridColumn>
+          <dxg:GridColumn FieldName="UsrSample" Header="Кто отправил?" MinWidth="80" Width="80"/>
+          <dxg:GridColumn FieldName="Md" Header="ОЗМ" MinWidth="120" Width="120"/>
+          <dxg:GridColumn FieldName="SampleId" Header="ИД Обр." MinWidth="70" Width="70" ReadOnly="True" AllowEditing="False"/>
+          <dxg:GridColumn FieldName="Tstep" Header="Т.Ш." MinWidth="70" Width="70" ReadOnly="True" AllowEditing="False"/>
+          <dxg:GridColumn FieldName="IsValidate" Header="B" MinWidth="20" Width="20" EditSettings="{dxe:CheckSettings}"/>
+          <dxg:GridColumn FieldName="StFlg" Header="Cт" MinWidth="23" Width="23" EditSettings="{dxe:CheckSettings}"/>
+        </dxg:GridControl.Columns>
+      </dxg:GridControl>
+    </dxl:LayoutGroup>
+
+    <dxl:LayoutGroup View="Group"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Vertical">
+            <dxl:LayoutGroup Header="Параметры образца" View="GroupBox" HorizontalAlignment="Stretch" Orientation="Vertical" VerticalAlignment="Top" Height="190">
+                <dxl:LayoutGroup Header="Типы измерений параметров образца" View="GroupBox" HorizontalAlignment="Stretch" Orientation="Vertical">
+                    <dxl:LayoutItem Name="layoutItem1">
+                        <dxl:FlowLayoutControl Name="flowLayoutControl1" Orientation="Horizontal" ItemSpace="15" Padding="0">
+                            <Button Command="{Binding ManualSetPropUnitSelectorCommand}" ToolTip="Занести результыты редактирования.">
+                                <Image Source="pack://application:,,,/Viz.WrkModule.MagLab;component/Images/refresh-16x16.png" />
+                            </Button>
+                            <RadioButton Content="Лист" IsChecked="True" Command="{Binding SelectUnitCommand}" CommandParameter="1" Foreground="{Binding UnitColor[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UnitEnable[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <RadioButton Content="Эпштейн" Command="{Binding SelectUnitCommand}" CommandParameter="2" Foreground="{Binding UnitColor[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UnitEnable[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <RadioButton Content="Изоляция" Command="{Binding SelectUnitCommand}" CommandParameter="3" Foreground="{Binding UnitColor[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UnitEnable[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <RadioButton Content="Адгезия" Command="{Binding SelectUnitCommand}" CommandParameter="4" Foreground="{Binding UnitColor[3], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UnitEnable[3], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <RadioButton Content="Гибы" Command="{Binding SelectUnitCommand}" CommandParameter="5" Foreground="{Binding UnitColor[4], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UnitEnable[4], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <RadioButton Content="HИ" Command="{Binding SelectUnitCommand}" CommandParameter="6"/>
+                        </dxl:FlowLayoutControl>
+                    </dxl:LayoutItem>
+                </dxl:LayoutGroup>
+                <dxg:GridControl Name="GcSampleData" ItemsSource="{Binding SamplesData}" ShowBorder="True" Tag="1" AllowMRUFilterList="False">
+                   <dxg:GridControl.Columns>
+                        <dxg:GridColumn Name="grdDataCol1" FieldName="Massa" Header="Масса" Tag="1" MinWidth="55" Width="55" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol2" FieldName="B3" Header="B3" Tag="9" MinWidth="55" Width="55" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol3" FieldName="B30" Header="B30" Tag="10" MinWidth="55" Width="55" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol4" FieldName="B100" Header="B100" Tag="2" MinWidth="55" Width="55" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol5" FieldName="B800" Header="B800" Tag="3" MinWidth="55" Width="55" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol6" FieldName="B2500" Header="B2500" Tag="4" MinWidth="55" Width="55" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol7" FieldName="B5000" Header="B5000" Tag="5" MinWidth="55" Width="55" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol8" FieldName="P1050" Header="P1.0/50" Tag="11" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol9" FieldName="P1350" Header="P1.3/50" Tag="8" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol10" FieldName="P1550" Header="P1.5/50" Tag="6" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol11" FieldName="P1750" Header="P1.7/50" Tag="7" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol12" FieldName="P004500" Header="P0.04/500" Tag="12" MinWidth="85" Width="85" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol13" FieldName="Hd004500" Header="HD0.04/500" Tag="13" MinWidth="85" Width="85" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol14" FieldName="P01500" Header="P0.1/500" Tag="14" MinWidth="85" Width="85" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol15" FieldName="Hd01500" Header="HD0.1/500" Tag="15" MinWidth="85" Width="85" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol16" FieldName="P0041000" Header="P0.04/1000" Tag="16" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol17" FieldName="Hd0041000" Header="HD0.04/1000" Tag="17" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol18" FieldName="P011000" Header="P0.1/1000" Tag="18" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol19" FieldName="Hd011000" Header="HD0.1/1000" Tag="19" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol20" FieldName="Iup1" Header="Ток верх1" Tag="120" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n3, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol21" FieldName="Iup2" Header="Ток верх2" Tag="125" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n3, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol22" FieldName="Iup3" Header="Ток верх3" Tag="130" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n3, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol23" FieldName="Iup4" Header="Ток верх4" Tag="135" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n3, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol24" FieldName="Iup5" Header="Ток верх5" Tag="140" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n3, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol25" FieldName="Idown1" Header="Ток низ1" Tag="145" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n3, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol26" FieldName="Idown2" Header="Ток низ2" Tag="150" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n3, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol27" FieldName="Idown3" Header="Ток низ3" Tag="155" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n3, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol28" FieldName="Idown4" Header="Ток низ4" Tag="160" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n3, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol29" FieldName="Idown5" Header="Ток низ5" Tag="165" MinWidth="90" Width="90" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n3, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol30" FieldName="Adout" Header="Адг Внеш." Tag="175" MinWidth="70" Width="70" Visible="True" >
+                          <dxg:GridColumn.CellStyle>
+                            <Style BasedOn="{StaticResource {dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}" TargetType="dxg:LightweightCellEditor">
+                              <Setter Property="Background" Value="Orange"/>
+                            </Style>
+                          </dxg:GridColumn.CellStyle>
+                          <dxg:GridColumn.EditSettings>
+                            <dxe:ComboBoxEditSettings IsTextEditable="False">
+                              <dxe:ComboBoxEditSettings.Items>
+                                <sys:String>G</sys:String>
+                                <sys:String>X</sys:String>
+                                <sys:String>Y</sys:String>
+                              </dxe:ComboBoxEditSettings.Items>
+                            </dxe:ComboBoxEditSettings>
+                          </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="grdDataCol31" FieldName="Adin" Header="Адг Внут." Tag="170" MinWidth="65" Width="65" Visible="True" >
+                          <dxg:GridColumn.CellStyle>
+                            <Style BasedOn="{StaticResource {dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}" TargetType="dxg:LightweightCellEditor">
+                              <Setter Property="Background" Value="Orange"/>
+                            </Style>
+                          </dxg:GridColumn.CellStyle>
+                          <dxg:GridColumn.EditSettings>
+                            <dxe:ComboBoxEditSettings IsTextEditable="False">
+                              <dxe:ComboBoxEditSettings.Items>
+                                <sys:String>A</sys:String>
+                                <sys:String>B</sys:String>
+                                <sys:String>C</sys:String>
+                                <sys:String>D</sys:String>
+                                <sys:String>E</sys:String>
+                                <sys:String>F</sys:String>
+                                <sys:String>O</sys:String>
+                              </dxe:ComboBoxEditSettings.Items>
+                            </dxe:ComboBoxEditSettings>
+                          </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="grdDataCol32" FieldName="Gib1" Header="Гиб1" Tag="28" MinWidth="55" Width="55" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True, AllowNullInput=True}" />
+                        <dxg:GridColumn Name="grdDataCol33" FieldName="Gib2" Header="Гиб2" Tag="29" MinWidth="55" Width="55" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True, AllowNullInput=True}" />
+                        <dxg:GridColumn Name="grdDataCol34" FieldName="P1550ApProd" Header="P1.5/50 Прод" Tag="180" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol35" FieldName="B2500ApProd" Header="B2500 Прод" Tag="185" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol36" FieldName="P1350ApPoper" Header="P1.3/50 Попер" Tag="190" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol37" FieldName="B2500ApPoper" Header="B2500 Попер" Tag="195" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol38" FieldName="P1550ApPoper" Header="P1,5/50 Попер" Tag="200" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol39" FieldName="B40ni" Header="B40" Tag="205" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol40" FieldName="B60ni" Header="B60" Tag="210" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol41" FieldName="B120ni" Header="B120" Tag="215" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol42" FieldName="B500ni" Header="B500" Tag="220" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol43" FieldName="B1000ni" Header="B1000" Tag="225" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol44" FieldName="B1200ni" Header="B1200" Tag="230" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol45" FieldName="B2500ni" Header="B2500" Tag="235" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol46" FieldName="B5000ni" Header="B5000" Tag="240" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol47" FieldName="B10000ni" Header="B10000" Tag="245" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol48" FieldName="B24000ni" Header="B24000" Tag="250" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol49" FieldName="B30000ni" Header="B30000" Tag="255" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol50" FieldName="HcPoperAoNi" Header="Hc поп ПО" Tag="260" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol51" FieldName="HcPoperBoNi" Header="Hc поп ДО" Tag="265" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol52" FieldName="HcProdAoNi" Header="Hc вдл ПО" Tag="270" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol53" FieldName="HcProdBoNi" Header="Hc вдл ДО" Tag="275" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol54" FieldName="RavgNi" Header="R сред" Tag="280" MinWidth="65" Width="65" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+                        <dxg:GridColumn Name="grdDataCol55" FieldName="SteelMarkNi" Header="R сред" Tag="285" MinWidth="65" Width="65" Visible="True"/>
+                        <dxg:GridColumn Name="grdDataCol56" FieldName="AdOutR" Header="Адг Внеш. П" Tag="1020" MinWidth="80" Width="80" Visible="True">
+                          <dxg:GridColumn.CellStyle>
+                            <Style BasedOn="{StaticResource {dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}" TargetType="dxg:LightweightCellEditor">
+                              <Setter Property="Background" Value="LightSkyBlue"/>
+                            </Style>
+                          </dxg:GridColumn.CellStyle>
+                          <dxg:GridColumn.EditSettings>
+                            <dxe:ComboBoxEditSettings IsTextEditable="False">
+                              <dxe:ComboBoxEditSettings.Items>
+                                <sys:String>G</sys:String>
+                                <sys:String>X</sys:String>
+                                <sys:String>Y</sys:String>
+                              </dxe:ComboBoxEditSettings.Items>
+                            </dxe:ComboBoxEditSettings>
+                          </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="grdDataCol57" FieldName="AdInR" Header="Адг Внут. П" Tag="1015" MinWidth="80" Width="80" Visible="True" >
+                          <dxg:GridColumn.CellStyle>
+                            <Style BasedOn="{StaticResource {dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}" TargetType="dxg:LightweightCellEditor">
+                              <Setter Property="Background" Value="LightSkyBlue"/>
+                            </Style>
+                          </dxg:GridColumn.CellStyle>
+                          <dxg:GridColumn.EditSettings>
+                            <dxe:ComboBoxEditSettings IsTextEditable="False">
+                              <dxe:ComboBoxEditSettings.Items>
+                                <sys:String>A</sys:String>
+                                <sys:String>B</sys:String>
+                                <sys:String>C</sys:String>
+                                <sys:String>D</sys:String>
+                                <sys:String>E</sys:String>
+                                <sys:String>F</sys:String>
+                                <sys:String>O</sys:String>
+                              </dxe:ComboBoxEditSettings.Items>
+                            </dxe:ComboBoxEditSettings>
+                          </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="grdDataCol58" FieldName="AdOutL" Header="Адг Внеш. Л" Tag="1010" MinWidth="80" Width="80" Visible="True">
+                          <dxg:GridColumn.CellStyle>
+                            <Style BasedOn="{StaticResource {dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}" TargetType="dxg:LightweightCellEditor">
+                              <Setter Property="Background" Value="PaleGreen"/>
+                            </Style>
+                          </dxg:GridColumn.CellStyle>
+                          <dxg:GridColumn.EditSettings>
+                            <dxe:ComboBoxEditSettings IsTextEditable="False">
+                              <dxe:ComboBoxEditSettings.Items>
+                                <sys:String>G</sys:String>
+                                <sys:String>X</sys:String>
+                                <sys:String>Y</sys:String>
+                              </dxe:ComboBoxEditSettings.Items>
+                            </dxe:ComboBoxEditSettings>
+                          </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="grdDataCol59" FieldName="AdInL" Header="Адг Внут. Л" Tag="1005" MinWidth="80" Width="80" Visible="True" >
+                          <dxg:GridColumn.CellStyle>
+                            <Style BasedOn="{StaticResource {dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}" TargetType="dxg:LightweightCellEditor">
+                              <Setter Property="Background" Value="PaleGreen"/>
+                            </Style>
+                          </dxg:GridColumn.CellStyle>
+                          <dxg:GridColumn.EditSettings>
+                            <dxe:ComboBoxEditSettings IsTextEditable="False">
+                              <dxe:ComboBoxEditSettings.Items>
+                                <sys:String>A</sys:String>
+                                <sys:String>B</sys:String>
+                                <sys:String>C</sys:String>
+                                <sys:String>D</sys:String>
+                                <sys:String>E</sys:String>
+                                <sys:String>F</sys:String>
+                                <sys:String>O</sys:String>
+                              </dxe:ComboBoxEditSettings.Items>
+                            </dxe:ComboBoxEditSettings>
+                          </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="grdDataCol60" FieldName="AdOutSimens" Header="Адг Сим Внеш." Tag="1030" MinWidth="90" Width="90" Visible="True">
+                          <dxg:GridColumn.CellStyle>
+                            <Style BasedOn="{StaticResource {dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}" TargetType="dxg:LightweightCellEditor">
+                              <Setter Property="Background" Value="Gold"/>
+                            </Style>
+                          </dxg:GridColumn.CellStyle>
+                          <dxg:GridColumn.EditSettings>
+                            <dxe:ComboBoxEditSettings IsTextEditable="False">
+                              <dxe:ComboBoxEditSettings.Items>
+                                <sys:String>ДА</sys:String>
+                                <sys:String>НЕТ</sys:String>
+                              </dxe:ComboBoxEditSettings.Items>
+                            </dxe:ComboBoxEditSettings>
+                          </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="grdDataCol61" FieldName="AdInSimens" Header="Адг Сим Внут." Tag="1025" MinWidth="90" Width="90" Visible="True" >
+                          <dxg:GridColumn.CellStyle>
+                            <Style BasedOn="{StaticResource {dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}" TargetType="dxg:LightweightCellEditor">
+                              <Setter Property="Background" Value="Gold"/>
+                            </Style>
+                          </dxg:GridColumn.CellStyle>
+                          <dxg:GridColumn.EditSettings>
+                            <dxe:ComboBoxEditSettings IsTextEditable="False">
+                              <dxe:ComboBoxEditSettings.Items>
+                                <sys:String>ДА</sys:String>
+                                <sys:String>НЕТ</sys:String>
+                              </dxe:ComboBoxEditSettings.Items>
+                            </dxe:ComboBoxEditSettings>
+                          </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                      </dxg:GridControl.Columns>
+                   <dxg:GridControl.View>
+                     <dxg:TableView NavigationStyle="Cell" ShowGroupPanel="False" IsDeferredScrolling="True" ScrollingMode="Smart" EditorButtonShowMode="ShowAlways" AllowGrouping="False" AllowSorting="False" AllowColumnFiltering="False" AllowFilterEditor="False" AllowMoveColumnToDropArea="False" IsColumnMenuEnabled="False" IsGroupPanelMenuEnabled="False" />
+                   </dxg:GridControl.View>
+                </dxg:GridControl>
+            </dxl:LayoutGroup>
+       <dxl:LayoutGroup Header="Параметры пробы" View="GroupBox" ItemSpace="10" HorizontalAlignment="Stretch" Orientation="Horizontal" Height="115">
+        <dxg:GridControl Name="GcProbeData" ItemsSource="{Binding ProbeData}" ShowBorder="True" Tag="0">
+          <dxg:GridControl.Columns>
+            <dxg:GridColumn Name="grdDCol4" FieldName="VpKrvBeg" Header="Выпуклость Кривизны Н" Tag="900" MinWidth="75" Width="75" Visible="False">
+              <dxg:GridColumn.EditSettings>
+                <dxe:ComboBoxEditSettings IsTextEditable="False">
+                  <dxe:ComboBoxEditSettings.Items>
+                      <!--dxe:ComboBoxEditItem Content="+"/-->
+                      <!--dxe:ComboBoxEditItem Content="-"/-->
+                      <sys:String>+</sys:String>
+                      <sys:String>-</sys:String>
+                  </dxe:ComboBoxEditSettings.Items>
+                </dxe:ComboBoxEditSettings>
+              </dxg:GridColumn.EditSettings>
+            </dxg:GridColumn>
+            <dxg:GridColumn Name="grdDCol2" FieldName="KrvBeg" Header="Кривизна Н" Tag="905" MinWidth="55" Width="55" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol5" FieldName="VpKrvEnd" Header="Выпуклость Кривизны К" Tag="910" MinWidth="75" Width="75" Visible="False">
+              <dxg:GridColumn.EditSettings>
+                <dxe:ComboBoxEditSettings IsTextEditable="False">
+                  <dxe:ComboBoxEditSettings.Items>
+                    <sys:String>+</sys:String>
+                    <sys:String>-</sys:String>
+                  </dxe:ComboBoxEditSettings.Items>
+                </dxe:ComboBoxEditSettings>
+              </dxg:GridColumn.EditSettings>
+            </dxg:GridColumn>
+            <dxg:GridColumn Name="grdDCol3" FieldName="KrvEnd" Header="Кривизна К" Tag="915" MinWidth="55" Width="55" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol13" FieldName="TpokrUp" Header="Толщина покрытия верх" Tag="920" MinWidth="65" Width="65" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol14" FieldName="TpokrDown" Header="Толщина покрытия низ" Tag="925" MinWidth="55" Width="55"  Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol1" FieldName="DenMat" Header="Плотность" Tag="930" MinWidth="58" Width="58" Visible="False"  EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol18" FieldName="IsStat" Header="Статистика" Tag="935" MinWidth="20" Width="20" Visible="False" EditSettings="{dxe:CheckSettings}" />
+            <dxg:GridColumn Name="grdDCol6" FieldName="OstNapr" Header="Остаточное напряжение" Tag="940" MinWidth="75" Width="75" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol7" FieldName="CofStar" Header="Коэфф стар" Tag="945" MinWidth="70" Width="70" Visible="False"  EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol8" FieldName="CofZapol" Header="Коэфф запол" Tag="950" MinWidth="75" Width="75" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol9" FieldName="AnzInduc" Header="Анизотропия индукции" Tag="955" MinWidth="75" Width="75" Visible="False"  EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol10" FieldName="TmpResist" Header="Временное сопротивление" Tag="960" MinWidth="75" Width="75" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol11" FieldName="OtnosUdl" Header="Относительное удлинение" Tag="965" MinWidth="70" Width="70" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol12" FieldName="Tverd" Header="Твердость" Tag="970" MinWidth="60" Width="60" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol15" FieldName="MgstrD" Header="Магнитострикция D" Tag="975" MinWidth="55" Width="55" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol16" FieldName="MgstrDpp" Header="Магнитострикция Dpp" Tag="980" MinWidth="55" Width="55" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="grdDCol17" FieldName="KorForce" Header="Коэрцитивная сила" Tag="985" MinWidth="55" Width="55" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="gridCol19" FieldName="CofAnzUmp" Header="Коэффициент анизотроп УМП" Tag="990" MinWidth="65" Width="65" Visible="False" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=d, MaskUseAsDisplayFormat=True}" />
+            <dxg:GridColumn Name="gridCol20" FieldName="SteelMarkNiX" Header="Окончат. марка НИС" Tag="995" MinWidth="65" Width="65" Visible="False"/>
+            <dxg:GridColumn Name="grdDCol21" Tag="1000" Header="Фл.Осып" MinWidth="40" Width="40" DisplayMemberBinding="{Binding OsypFlag, Mode=TwoWay, Converter={StaticResource CharYn2BooleanConverter}}">
+              <dxg:GridColumn.CellTemplate>
+                <DataTemplate>
+                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <dxe:CheckEdit x:Name="PART_Editor" />
+                  </StackPanel>
+                </DataTemplate>
+              </dxg:GridColumn.CellTemplate>
+            </dxg:GridColumn>
+          </dxg:GridControl.Columns>
+          <dxg:GridControl.View>
+            <dxg:TableView NavigationStyle="Cell" ShowGroupPanel="False" IsDeferredScrolling="True" ScrollingMode="Smart" EditorButtonShowMode="ShowAlways" AllowGrouping="False" AllowSorting="False" AllowColumnFiltering="False" AllowFilterEditor="False" AllowMoveColumnToDropArea="False" IsColumnMenuEnabled="False" IsGroupPanelMenuEnabled="False" />
+          </dxg:GridControl.View>
+        </dxg:GridControl>
+      </dxl:LayoutGroup>
+      <dxl:LayoutGroup Header="Лист,Эпштейн, КЭСИ" View="GroupBox" ItemSpace="0" HorizontalAlignment="Stretch" Orientation="Horizontal" Height="130">
+        <Grid Margin="0,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+          </Grid.RowDefinitions>
+          <dxg:GridControl Grid.Row="0" Grid.Column="0" ItemsSource="{Binding ListApInfoData}" ShowBorder="True" AllowMRUFilterList="False">
+            <dxg:GridControl.Columns>
+              <dxg:GridColumn FieldName="Name" Header="Тип"  MinWidth="45" Width="45" Visible="True"/>
+              <dxg:GridColumn FieldName="B100" Header="B100" MinWidth="40" Width="40" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+              <dxg:GridColumn FieldName="B800" Header="B800" MinWidth="40" Width="40" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+              <dxg:GridColumn FieldName="B2500" Header="B2500" MinWidth="45" Width="45" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+              <dxg:GridColumn FieldName="P1550" Header="P1,5/50" MinWidth="50" Width="50" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+              <dxg:GridColumn FieldName="P1750" Header="P1,7/50" MinWidth="50" Width="50" Visible="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+            </dxg:GridControl.Columns>
+            <dxg:GridControl.View>
+              <dxg:TableView ShowIndicator="False" NavigationStyle="None" ShowGroupPanel="False" IsDeferredScrolling="True" AllowGrouping="False" AllowSorting="False" AllowColumnFiltering="False" AllowFilterEditor="False" AllowMoveColumnToDropArea="False" IsColumnMenuEnabled="False" IsGroupPanelMenuEnabled="False" />
+            </dxg:GridControl.View>
+          </dxg:GridControl>
+          <Grid Margin="2,0,0,0" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="1.5*" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="КЭСИ верх" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,0,5,0"  HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" FontWeight="Bold" Text="{Binding Path=KesiValue[0]}" FontFamily="Arial" FontSize="16"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="КЭСИ низ" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="1" Grid.Column="1"  Margin="0,0,5,0"  HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" FontWeight="Bold" Text="{Binding Path=KesiValue[1]}" FontFamily="Arial"  FontSize="16"/>              
+            <Label Grid.Row="2" Grid.Column="0" Content="КЭСИ сред" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="2" Grid.Column="1"  Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" FontWeight="Bold" Text="{Binding Path=KesiValue[2]}" FontFamily="Arial"  FontSize="16"  Foreground="Blue"/>              
+            <Label Grid.Row="0" Grid.Column="2" Content="КЭСИ худш" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="3"  Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" FontWeight="Bold" Text="{Binding Path=KesiValue[3]}" FontFamily="Arial"  FontSize="16"  Foreground="Blue"/>
+            <Label Grid.Row="1" Grid.Column="2" Content="КЭСИ сред/худш" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="1" Grid.Column="3"  Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" FontWeight="Bold" Text="{Binding Path=KesiValue[4]}" FontFamily="Arial"  FontSize="16"/>
+            <Label Grid.Row="2" Grid.Column="2" Content="КЭСИ сред/худш/ст" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="2" Grid.Column="3"  Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" FontWeight="Bold" Text="{Binding Path=KesiValue[5]}" FontFamily="Arial"  FontSize="16"/>
+          </Grid>
+        </Grid>
+      </dxl:LayoutGroup>
+      <dxl:LayoutGroup Header="Список материалов, имеющих неотправленные в MES образцы" View="GroupBox" HorizontalAlignment="Stretch" Orientation="Vertical" ItemLabelsAlignment="Local" IsCollapsible="True" IsCollapsed="True">
+      </dxl:LayoutGroup>
+    </dxl:LayoutGroup>
+  </dxl:LayoutControl>
+</ruc:RibbonUserControl>

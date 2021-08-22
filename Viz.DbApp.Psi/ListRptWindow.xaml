@@ -1,0 +1,11 @@
+﻿<dxc:DXWindow x:Class="Viz.DbApp.Psi.ListRptWindow" 
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/core"
+xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+Title="Подключение к БД" Width="700" WindowStartupLocation="CenterScreen" Height="800" Loaded="Window_Loaded" Icon="/Viz.DbApp.Psi;component/Images/Help-16x16.png">
+  <FlowDocumentScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <FlowDocument Name="FlowDoc" IsOptimalParagraphEnabled="True">
+    </FlowDocument>
+  </FlowDocumentScrollViewer>
+</dxc:DXWindow>

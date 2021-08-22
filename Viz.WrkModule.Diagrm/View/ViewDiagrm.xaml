@@ -1,0 +1,92 @@
+﻿<ruc:RibbonUserControl x:Class="Viz.WrkModule.Diagrm.ViewDiagrm"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" 
+xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+xmlns:dxl="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+xmlns:dxch="http://schemas.devexpress.com/winfx/2008/xaml/charts"                        
+xmlns:ruc="clr-namespace:Smv.RibbonUserUI;assembly=Smv.Prj.Core"             
+mc:Ignorable="d" 
+d:DesignHeight="347" d:DesignWidth="622" RegName="UcDiagrm" Caption="Работа с диаграммами характеристик ЭС">
+  <ruc:RibbonUserControl.BarManagerItems>
+    <dxb:BarEditItem Name="beiGroup"  EditValue="{Binding GroupId}" Content="Группа:" Hint="Выбор группы параметров для построения диаграммы" EditWidth="190">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:ComboBoxEditSettings ItemsSource="{Binding Path=(dxb:BarEditItem.BarEditItem).DataContext.DgGroup, RelativeSource={RelativeSource Self}}" DisplayMember="Name" ValueMember="Id" IsTextEditable="False">
+      </dxe:ComboBoxEditSettings>
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+    <dxb:BarEditItem Name="beiParam" EditValue="{Binding TypeDiagrm,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Content="Диаг-мма:" Hint="Выбор параметра для построения диаграммы" EditWidth="190">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:ComboBoxEditSettings ItemsSource="{Binding Path=(dxb:BarEditItem.BarEditItem).DataContext.DgTypeDiagramm, RelativeSource={RelativeSource Self}}" DisplayMember="Desc" ValueMember="PvName" IsTextEditable="False">
+          <!--dxe:ComboBoxEditSettings.StyleSettings>
+            <dxe:CheckedComboBoxStyleSettings />
+          </dxe:ComboBoxEditSettings.StyleSettings-->
+            <!--dxe:ComboBoxEditSettings.Items>
+              <dxe:ComboBoxEditItem Content="David Miles" />
+              <dxe:ComboBoxEditItem Content="John Spor" />
+              <dxe:ComboBoxEditItem Content="Nick Jackson" />
+            </dxe:ComboBoxEditSettings.Items-->
+        </dxe:ComboBoxEditSettings>
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+    <dxb:BarEditItem Name="beiTextLocId" EditValue="{Binding MatLocId, Mode=TwoWay}" Content="Лок №:" Hint="Локальный номер материала" EditWidth="190">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:TextEditSettings TextWrapping="NoWrap"/>
+      </dxb:BarEditItem.EditSettings>
+      <!--
+      <dxb:BarEditItem.EditStyle>
+        <Style TargetType="dxe:TextEdit">
+          <Setter Property="FontSize" Value="14"/>
+          <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+      </dxb:BarEditItem.EditStyle>
+      -->
+    </dxb:BarEditItem>
+    <dxb:BarButtonItem Name="btnShowDgCoil" Content="Показ диаг" Command="{Binding ShowDiagrmCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.Diagrm;Component/Images/DgRulon-32x32.png" Description="New blank document." Hint="Показать диаграмму выбранной характеристики для одиночного материала." />
+    <dxb:BarButtonItem Name="btnShowDgStend" Content="Показ стд" LargeGlyph="pack://application:,,,/Viz.WrkModule.Diagrm;Component/Images/ModuleGlyph-32x32.ico" Description="New blank document." Hint="Показать диаграмму выбранной характеристики для стенда." IsVisible="False" />
+    <dxb:BarButtonItem Name="btnSaveDg" Content="Сохр"  Command="{Binding SaveDiagrmCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.Diagrm;Component/Images/save-32x32.png" Description="New blank document." Hint="Сохранить диаграмму в графический файл." />
+    <dxb:BarEditItem Name="beiAxisYMinVal" EditValue="{Binding MinAxisY}"  Content="Y Min:" Hint="Минимальное значение шкалы оси Y" EditWidth="70">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:TextEditSettings TextWrapping="Wrap" MaskType="Numeric"  Mask="n2" MaskUseAsDisplayFormat="True"/>
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+    <dxb:BarEditItem Name="beiAxisYMaxVal" EditValue="{Binding MaxAxisY}" Content="Y Max:" Hint="Максимальное заначение шкалы оси Y" EditWidth="70">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:TextEditSettings TextWrapping="Wrap" MaskType="Numeric"  Mask="n2" MaskUseAsDisplayFormat="True"/>
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+    <dxb:BarButtonItem Name="btnAplValY" Command="{Binding ApplyMinMaxValDiagrmCommand}"  Content="    Применить   " Glyph="pack://application:,,,/Viz.WrkModule.Diagrm;Component/Images/Apply-16x16.png" Description="New blank document." Hint="Применить максимальное и минимальное значение к текущей диаграмме." />
+    <dxb:BarButtonItem Name="btnQuitxyz" Content="Выход" Tag="CloseUserControl" LargeGlyph="pack://application:,,,/Viz.WrkModule.Diagrm;Component/Images/close-32x32.png" Description="New blank document." Hint="Закончить работу с АРМ Диаграммы." />
+  </ruc:RibbonUserControl.BarManagerItems>
+    
+  <ruc:RibbonUserControl.UserPages>
+    <dxr:RibbonPage Caption="Диаграммы">
+      <dxr:RibbonPageGroup Name="rpgParam" Caption="Выбор характеристики" AllowCollapse="False">
+        <dxb:BarEditItemLink BarItemName="beiGroup" />  
+        <dxb:BarEditItemLink BarItemName="beiParam" />
+        <dxb:BarEditItemLink BarItemName="beiTextLocId" />
+        <dxb:BarButtonItemLink BarItemName="btnShowDgCoil" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarButtonItemLink BarItemName="btnShowDgStend" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />  
+      </dxr:RibbonPageGroup>
+      <dxr:RibbonPageGroup Name="rpgAxisY" Caption="Min,Max оси Y" AllowCollapse="False">
+        <dxb:BarEditItemLink BarItemName="beiAxisYMinVal" />     
+        <dxb:BarEditItemLink BarItemName="beiAxisYMaxVal" />
+        <dxb:BarButtonItemLink BarItemName="btnAplValY" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+      <dxr:RibbonPageGroup Name="rpgOperation" Caption="Операции" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnSaveDg" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />  
+      </dxr:RibbonPageGroup>
+      <dxr:RibbonPageGroup Name="rpgQuit" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnQuitxyz" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+    </dxr:RibbonPage>
+  </ruc:RibbonUserControl.UserPages>
+    
+  <dxch:ChartControl Name="ChrDiag">
+ </dxch:ChartControl>
+</ruc:RibbonUserControl>

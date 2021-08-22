@@ -1,0 +1,126 @@
+﻿<dx:DXWindow x:Class="Viz.WrkModule.MagLab.ViewDlgSiemensSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:dxl="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
+             xmlns:conv="clr-namespace:Viz.WrkModule.MagLab;assembly=" 
+             Name="WinDlgSiemensSample" Height="400" Width="1080"  WindowStartupLocation="CenterScreen" ShowInTaskbar="False" ResizeMode="CanResize" WindowState="Maximized" Title="Образцы для Siemens" Icon="/Viz.WrkModule.MagLab;component/Images/DlgMesurCof-16x16.png">
+  <dx:DXWindow.Resources>
+    <conv:IntToImageConverter x:Key="IntToImageConverter" />
+    <conv:SlImageConverter x:Key="SlImageConverter" />
+  </dx:DXWindow.Resources>
+  <DockPanel>
+    <dxb:ToolBarControl  DockPanel.Dock="Top" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False" AllowRename="False" BarItemDisplayMode="ContentAndGlyph" UseWholeRow="True">
+      <dxb:BarItemSeparator/>
+      <dxb:BarEditItem Name="beiSampleDateFrom" EditValue="{Binding DateFrom}" Content="Дата Н:" Hint="Начальная дата для выборки образцов" EditWidth="90">
+        <dxb:BarEditItem.EditSettings>
+          <dxe:DateEditSettings TextWrapping="Wrap" IsTextEditable="False" />
+        </dxb:BarEditItem.EditSettings>
+      </dxb:BarEditItem>
+
+      <dxb:BarEditItem Name="beiSampleDateTo" EditValue="{Binding DateTo}" Content="Дата К:" Hint="Конечная даты для выборки образцов" EditWidth="90">
+        <dxb:BarEditItem.EditSettings>
+          <dxe:DateEditSettings TextWrapping="Wrap" IsTextEditable="False" />
+        </dxb:BarEditItem.EditSettings>
+      </dxb:BarEditItem>
+
+      <dxb:BarEditItem Name="beiShift" Content="Смена:" EditValue="{Binding SelectedShift}" Hint="Выбор смены" EditWidth="90">
+        <dxb:BarEditItem.EditSettings>
+          <dxe:ComboBoxEditSettings ItemsSource="{Binding Shift}" DisplayMember="NameShift" ValueMember="Id" IsTextEditable="False"/>
+        </dxb:BarEditItem.EditSettings>
+      </dxb:BarEditItem>
+
+      <dxb:BarButtonItem Name="btnShowSamples" Command="{Binding GetSampleCommand}" Content="Обр-цы" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Samples-32x32.png" Hint="Получить список образцов за выбранный период." GlyphAlignment="Top" />
+      <dxb:BarItemSeparator/>
+      <dxb:BarEditItem Content="Лок №: " Hint="Ввод значения поиска" EditWidth="190" EditValue="{Binding FindLocNum, Mode=TwoWay}">
+        <dxb:BarEditItem.EditSettings>
+          <dxe:TextEditSettings TextWrapping="Wrap"/>
+        </dxb:BarEditItem.EditSettings>
+        <dxb:BarEditItem.EditStyle>
+          <Style TargetType="dxe:TextEdit">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+          </Style>
+        </dxb:BarEditItem.EditStyle>
+      </dxb:BarEditItem>
+      <dxb:BarItemSeparator/>
+      <dxb:BarEditItem Name="beiSelDevice" EditValue="{Binding SelectedMeasureDevice, Mode=TwoWay}" Content="Устр-во:"  Hint="Выбор измерительного устр-ва" EditWidth="190">
+        <dxb:BarEditItem.EditSettings>
+          <dxe:ComboBoxEditSettings ItemsSource="{Binding Path=(dxb:BarEditItem.BarEditItem).DataContext.DeviceLst, RelativeSource={RelativeSource Self}}" DisplayMember="Name" ValueMember="Id"  IsTextEditable="False">
+          </dxe:ComboBoxEditSettings>
+        </dxb:BarEditItem.EditSettings>
+      </dxb:BarEditItem>
+      <dxb:BarItemSeparator/>
+      <dxb:BarButtonItem Name="btnFind" Content="Найти" Command="{Binding SearchByLocNumCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Find-32x32.png" Hint="Найти образцы по Лок №" GlyphAlignment="Top"/>
+      <dxb:BarButtonItem Name="btnAdd" Content="Новый" Command="{Binding CreateSamples4LocNumCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Add-32x32.png" Hint="Добавить образцы для Лок №" GlyphAlignment="Top"/>
+      <dxb:BarItemSeparator/>
+      <dxb:BarButtonItem Name="btnSave" Content="Сохр" Command="{Binding SaveChangesCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/save-32x32.png" Hint="Сохранить изменения" GlyphAlignment="Top"/>
+      <dxb:BarButtonItem Name="btnDelete" Content="Удал" Command="{Binding DeleteSampleCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/Delete-32x32.png" Hint="Удалить образец" GlyphAlignment="Top"/>
+      <dxb:BarItemSeparator/>
+      <dxb:BarButtonItem Name="btnMeasure" Content="Измер" Command="{Binding MeasureListParamCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/MeasureSampleUnit-32x32.png" Hint="Измерения по Листу" GlyphAlignment="Top"/>
+      <dxb:BarButtonItem Name="btnToMes" Content="В MES" Command="{Binding ToMesCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/ToMes-32x32.ico" Hint="Отправить характеристики образца в MES-систему" GlyphAlignment="Top"/>
+      <dxb:BarButtonItem Name="btnToEdit" Content="В измер." Command="{Binding ToEditCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/SampleToEdit-32x32.png" Hint="Вернуть образец в режим измерений" GlyphAlignment="Top"/>
+      <dxb:BarButtonItem Name="btnRpt" Content="Отчет" Command="{Binding SaveRptCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/RptProd-32x32.png" Hint="Сформировать отчет" GlyphAlignment="Top"/>
+      <dxb:BarButtonItem Name="btnGridToExcel" Content="В Excel" Command="{Binding ExportDataGridToExcelCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/ExportToXLSX_32x32.png" Hint="Экспорт данных в MS Excel" GlyphAlignment="Top"/>
+      <dxb:BarItemSeparator/>
+      <dxb:BarButtonItem Name="btnClose" Content="Выход" Command="{Binding CloseDialogCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.MagLab;Component/Images/close-32x32.png" Hint="Закрыть диалог" GlyphAlignment="Top"/>
+      <dxb:BarItemSeparator/>
+    </dxb:ToolBarControl>
+    <dxg:GridControl Name="GcSiemensSample" ShowBorder="True" ItemsSource="{Binding Path=SiemensSmp}">
+      <dxg:GridControl.View>
+        <dxg:TableView NavigationStyle="Cell"  AllowEditing="True" />
+      </dxg:GridControl.View>
+      <dxg:GridControl.Columns>
+        <dxg:GridColumn FieldName="State" Header="Ст" MinWidth="25" Width="25" AllowEditing="False">
+          <dxg:GridColumn.CellTemplate>
+            <DataTemplate>
+              <StackPanel DataContext="{Binding RowData.Row}">
+                <Image Source="{Binding Path=State, Converter={StaticResource IntToImageConverter}}" Stretch="None" Width="17" Height="17" />
+              </StackPanel>
+            </DataTemplate>
+          </dxg:GridColumn.CellTemplate>
+        </dxg:GridColumn>
+        <dxg:GridColumn FieldName="SlFlg" Header="Л" MinWidth="25" Width="25" AllowEditing="False">
+          <dxg:GridColumn.CellTemplate>
+            <DataTemplate>
+              <StackPanel DataContext="{Binding RowData.Row}">
+                <Image Source="{Binding Path=SlFlg, Converter={StaticResource SlImageConverter}}" Stretch="None" Width="17" Height="17" />
+              </StackPanel>
+            </DataTemplate>
+          </dxg:GridColumn.CellTemplate>
+        </dxg:GridColumn>
+        <dxg:GridColumn FieldName="Line" Header="Агр-т" MinWidth="40" Width="40" ReadOnly="True" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="TestType" Header="Проба" MinWidth="40" Width="40" ReadOnly="True" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="SamplePos" Header="Т" MinWidth="20" Width="20" ReadOnly="True" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="SamplePos2" Header="Т" MinWidth="20" Width="20" ReadOnly="True" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="SteelType" Header="Сталь" MinWidth="35" Width="35" ReadOnly="True" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="ThickNessNominal" Header="Толщ" MinWidth="35" Width="35" EditSettings="{dxe:TextSettings DisplayFormat=n2}" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="MatLocalNumber" Header="Лок номер" MinWidth="75" Width="75" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="MatMarkingInfo" Header="Стенд/Рул" MinWidth="80" Width="80" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="B100" Header="B100" MinWidth="55" Width="55" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+        <dxg:GridColumn FieldName="B800" Header="B800" MinWidth="55" Width="55" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+        <dxg:GridColumn FieldName="B2500" Header="B2500" MinWidth="55" Width="55" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+        <dxg:GridColumn FieldName="P1550" Header="P1,5/50" MinWidth="55" Width="55" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+        <dxg:GridColumn FieldName="P1750" Header="P1,7/50" MinWidth="55" Width="55" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n2, MaskUseAsDisplayFormat=True}" />
+        <dxg:GridColumn FieldName="Dpp1750" Header="∆ Р1,7/50" MinWidth="55" Width="55" ReadOnly="True" EditSettings="{dxe:TextSettings MaskType=Numeric, Mask=n0, MaskUseAsDisplayFormat=True}" />
+        <dxg:GridColumn FieldName="DtBegin" Header="Создан" MinWidth="100" Width="100" ReadOnly="True" AllowEditing="False">
+          <dxg:GridColumn.EditSettings>
+            <dxe:TextEditSettings DisplayFormat="dd.MM.yyyy HH:mm" />
+          </dxg:GridColumn.EditSettings>
+        </dxg:GridColumn>
+        <dxg:GridColumn FieldName="DtEnd" Header="Изменен" MinWidth="100" Width="100" ReadOnly="True" AllowEditing="False">
+          <dxg:GridColumn.EditSettings>
+            <dxe:TextEditSettings DisplayFormat="dd.MM.yyyy HH:mm" />
+          </dxg:GridColumn.EditSettings>
+        </dxg:GridColumn>
+        <dxg:GridColumn FieldName="UsrIns" Header="Кто создал?" MinWidth="80" Width="80" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="UsrUpd" Header="Кто изменил?" MinWidth="80" Width="80" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="Md" Header="ОЗМ" MinWidth="120" Width="120" AllowEditing="False"/>
+        <dxg:GridColumn FieldName="Tstep" Header="Т.Ш." MinWidth="70" Width="70" ReadOnly="True" AllowEditing="False"/>
+      </dxg:GridControl.Columns>
+    </dxg:GridControl>
+  </DockPanel>
+</dx:DXWindow>

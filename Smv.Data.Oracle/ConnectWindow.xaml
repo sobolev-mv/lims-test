@@ -1,0 +1,37 @@
+﻿<Window x:Class="Smv.Data.Oracle.ConnectWindow" 
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+Title="Подключение к базе данных" Width="486" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Height="218" Loaded="Window_Loaded">
+    <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" MinHeight="29" />
+    </Grid.RowDefinitions>
+    <Grid Name="grid1" Grid.Row="0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="90" />
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" MinHeight="32" />
+        <RowDefinition Height="Auto" MinHeight="30" />
+        <RowDefinition Height="Auto" MinHeight="32" />
+        <RowDefinition Height="Auto" MinHeight="32" />
+        <RowDefinition Height="Auto" MinHeight="26" />
+      </Grid.RowDefinitions>
+      <TextBox Grid.Column="1" Margin="2,2,2,2" Name="tbLogin" IsEnabled="False" />
+      <PasswordBox Grid.Column="1" Grid.Row="1" Margin="2,2,2,2" Name="pbPassword" />
+      <TextBox Grid.Column="1" Grid.Row="2" Margin="2,2,2,2" Name="tbBase" IsEnabled="False" />
+      <TextBox Grid.Column="1" Grid.Row="3" Margin="2,2,2,5" Name="tbzxz" IsEnabled="False" />
+      <CheckBox Grid.Column="1" Grid.Row="4" Margin="2,5,5,5" Name="chkBoxParam" Click="chkBoxParam_Checked">Изменить параметры подключения</CheckBox>
+      <Label Margin="5,0,0,0" Name="label1">Логин:</Label>
+      <Label Grid.Row="1" Margin="5,0,0,0" Name="label2">Пароль:</Label>
+      <Label Grid.Row="2" Margin="5,0,0,0" Name="label3">База:</Label>
+      <Label Grid.Row="3" Margin="5,0,0,0" Name="label4"></Label>
+    </Grid>
+    <DockPanel Grid.Row="1" Name="dockPanel1" VerticalAlignment="Stretch" LastChildFill="False">
+      <Button Name="button1" Width="75" DockPanel.Dock="Right" HorizontalContentAlignment="Center" Margin="3,3,3,10" IsCancel="True">Отмена</Button>
+      <Button Name="button2" Width="75" DockPanel.Dock="Right" Margin="3,3,3,10" IsDefault="True" Click="button2_Click">Ок</Button>
+    </DockPanel>
+  </Grid>
+</Window>

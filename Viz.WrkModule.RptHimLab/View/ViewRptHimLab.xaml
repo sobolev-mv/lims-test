@@ -1,0 +1,60 @@
+﻿<ruc:RibbonUserControl x:Class="Viz.WrkModule.RptHimLab.ViewRptHimLab"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" 
+xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+xmlns:dxl="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"                       
+xmlns:ruc="clr-namespace:Smv.RibbonUserUI;assembly=Smv.Prj.Core"             
+mc:Ignorable="d" 
+d:DesignHeight="579" d:DesignWidth="932" RegName="UcRptHimLab" Caption="Отчетность по измерениям химической лаборатории">
+  <ruc:RibbonUserControl.BarManagerItems>
+    <dxb:BarStaticItem Name="siGlyphqqq">
+      <dxb:BarStaticItem.ContentTemplate>
+        <DataTemplate>
+          <Image Source="pack://application:,,,/Viz.WrkModule.RptHimLab;Component/Images/BarImage.png"/>
+        </DataTemplate>
+      </dxb:BarStaticItem.ContentTemplate>
+    </dxb:BarStaticItem>
+    <dxb:BarButtonItem Name="btnHlpRpt" Content="Спис. отчет"  Command="{Binding ShowListRptCommand}" LargeGlyph="pack://application:,,,/Viz.WrkModule.RptHimLab;Component/Images/Help-32x32.png" Description="New blank document." Hint="Список отчетов." />
+    <dxb:BarButtonItem Name="btnQuitxyz" Content="Выход" Tag="CloseUserControl" LargeGlyph="pack://application:,,,/Viz.WrkModule.RptHimLab;Component/Images/close-32x32.png" Description="New blank document." Hint="Закончить работу с АРМ Отчетность хим. лаборатории." />
+  </ruc:RibbonUserControl.BarManagerItems>
+  <ruc:RibbonUserControl.UserPages>
+    <dxr:RibbonPage Caption="Отчеты">
+      <dxr:RibbonPageGroup Name="rpgProba" AllowCollapse="False">
+        <dxb:BarStaticItemLink BarItemName="siGlyphqqq" RibbonStyle="Large"/>
+        <dxb:BarButtonItemLink BarItemName="btnHlpRpt" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+      <dxr:RibbonPageGroup Name="rpgQuit" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnQuitxyz" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+    </dxr:RibbonPage>
+  </ruc:RibbonUserControl.UserPages>
+  <dxl:LayoutControl x:Name="LayoutRoot" Orientation="Vertical" StretchContentVertically="False" Background="Transparent">
+    <dxl:LayoutGroup Name="groupContainer" Orientation="Vertical" View="GroupBox">
+      <dxl:LayoutGroup.GroupBoxStyle>
+        <Style TargetType="dxl:GroupBox">
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="BorderBrush" Value="Transparent" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Setter Property="Padding" Value="0" />
+          <Setter Property="TitleVisibility" Value="Collapsed" />
+        </Style>
+      </dxl:LayoutGroup.GroupBoxStyle>
+      <dxl:LayoutGroup Name="Lg170001_800" Header="Показатели диэлектрических св-в покрытия" View="GroupBox" HorizontalAlignment="Stretch" Orientation="Vertical" ItemLabelsAlignment="Local" IsCollapsible="True" IsCollapsed="True" Tag="0" >
+        <dxl:LayoutItem>
+          <dxl:FlowLayoutControl Orientation="Horizontal" ItemSpace="10" Padding="0">
+            <dxe:DateEdit Width="90" EditValue="{Binding DateBegin}" IsTextEditable="False" />
+            <dxe:DateEdit Width="90" EditValue="{Binding DateEnd}" IsTextEditable="False" />
+            <Button Name="b170001_701" Content="Посуточно за месяц" Command="{Binding HimLabIsolPropCommand}" CommandParameter="1" HorizontalAlignment="Left"/>
+            <Button Name="b170001_702" Content="Понедельно за год"  Command="{Binding HimLabIsolPropCommand}" CommandParameter="2" HorizontalAlignment="Left"/>
+            <Button Name="b170001_703" Content="Общий за год"       Command="{Binding HimLabIsolPropCommand}" CommandParameter="3" HorizontalAlignment="Left"/>
+          </dxl:FlowLayoutControl>
+        </dxl:LayoutItem>
+      </dxl:LayoutGroup>
+    </dxl:LayoutGroup>
+  </dxl:LayoutControl>
+</ruc:RibbonUserControl>

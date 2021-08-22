@@ -1,0 +1,86 @@
+﻿<ruc:RibbonUserControl x:Class="Viz.WrkModule.PrintLabel.ViewPrintLabel"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" 
+xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+xmlns:dxl="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
+xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"  
+xmlns:ruc="clr-namespace:Smv.RibbonUserUI;assembly=Smv.Prj.Core"             
+mc:Ignorable="d" 
+d:DesignHeight="579" d:DesignWidth="932" RegName="UcRptLabel" Caption="Печать этикеток с ШК">
+  <ruc:RibbonUserControl.BarManagerItems>
+    <dxb:BarStaticItem Name="siGlyphqqq">
+      <dxb:BarStaticItem.ContentTemplate>
+        <DataTemplate>
+          <Image Source="pack://application:,,,/Viz.WrkModule.PrintLabel;Component/Images/BarImage-64x64.png"/>
+        </DataTemplate>
+      </dxb:BarStaticItem.ContentTemplate>
+    </dxb:BarStaticItem>
+    <dxb:BarButtonItem Name="btnQuitxyz" Content="Выход" Tag="CloseUserControl" LargeGlyph="pack://application:,,,/Viz.WrkModule.PrintLabel;Component/Images/close-32x32.png" Description="New blank document." Hint="Закончить работу с АРМ печать этикеток с ШК." />
+    <dxb:BarEditItem Name="beiListApr" Content="Апр:" EditValue="{Binding FinishApr}"  Hint="Список агрегатов" EditWidth="80" >
+      <dxb:BarEditItem.EditSettings>
+        <dxe:ComboBoxEditSettings ItemsSource="{Binding Path=(dxb:BarEditItem.BarEditItem).DataContext.LstFinishApr, RelativeSource={RelativeSource Self}}" DisplayMember="StrDlg" ValueMember="StrSql" PopupMaxHeight="250" IsTextEditable="False" TextWrapping="Wrap" PopupMinWidth="17" />
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+    <dxb:BarEditItem Name="beiIsRefresh" EditValue="{Binding IsRefresh}" Content="Автообновление" Hint="Включить/выключить автообновление материалов после агрегата.">
+      <dxb:BarEditItem.EditSettings>
+        <dxe:CheckEditSettings/>
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+    <dxb:BarCheckItem Name="bсiBlankWgt" Content="Лента без веса" Glyph="pack://application:,,,/Viz.WrkModule.PrintLabel;Component/Images/BlankWgt-16x16.png" IsChecked="{Binding IsPrintBlankWgtOnStripe}" IsEnabled="{Binding IsEnablePrintBlankWgtOnStripe}" Hint="Включить/выключить печать веса для ленты."/>
+    <dxb:BarCheckItem Name="bсiSelectMany" Content="Выбрать несколько" Glyph="pack://application:,,,/Viz.WrkModule.PrintLabel;Component/Images/SelectMany-16x16.png" IsChecked="{Binding IsSelectMany}"  Hint="Включить/выключить возможность выбора несколько материалов для печати."/>
+    <dxb:BarEditItem Name="beiListCo" Content="КЗ NMC:"  Hint="Список КЗ для NMC MEXICO" EditWidth="120" >
+      <dxb:BarEditItem.EditSettings>
+        <dxe:ComboBoxEditSettings ItemsSource="{Binding Path=(dxb:BarEditItem.BarEditItem).DataContext.LstFinishApr, RelativeSource={RelativeSource Self}}" DisplayMember="StrDlg" ValueMember="StrSql" PopupMaxHeight="250" IsTextEditable="False" TextWrapping="Wrap" PopupMinWidth="17" />
+      </dxb:BarEditItem.EditSettings>
+    </dxb:BarEditItem>
+
+
+    <dxb:BarButtonItem Name="btnListMat" Command="{Binding ShowMatCommand}"  Content="Мат-л" Glyph="pack://application:,,,/Viz.WrkModule.PrintLabel;Component/Images/ViewMatList-32x32.png" Hint="Показать материал после агрегата."/>
+    <dxb:BarButtonItem Name="btnPrint"  Command="{Binding PrintLabelCommand}" Content="Печать" Glyph="pack://application:,,,/Viz.WrkModule.PrintLabel;Component/Images/Print-32x32.png" Hint="Отправить этикетку на печать."/>
+  </ruc:RibbonUserControl.BarManagerItems>
+  <ruc:RibbonUserControl.UserPages>
+    <dxr:RibbonPage Caption="Этикетки">
+      <dxr:RibbonPageGroup Name="rpgProba" AllowCollapse="False">
+        <dxb:BarStaticItemLink BarItemName="siGlyphqqq" RibbonStyle="Large"/>
+      </dxr:RibbonPageGroup>
+      <dxr:RibbonPageGroup Name="rpgAgr" Caption="Материал после агрегата" AllowCollapse="False">
+        <dxb:BarEditItemLink BarItemName="beiListApr" RibbonStyle="SmallWithText"/>
+        <dxb:BarEditItemLink BarItemName="beiIsRefresh" />
+        <dxb:BarButtonItemLink BarItemName="btnListMat" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+      <dxr:RibbonPageGroup Name="rpgSelAndPrint" Caption="Выбор и печать метериала" AllowCollapse="False">
+        <dxb:BarCheckItemLink BarItemName="bсiBlankWgt" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarCheckItemLink BarItemName="bсiSelectMany" RibbonStyle="SmallWithText" UserGlyphSize="Small" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+        <dxb:BarEditItemLink BarItemName="beiListCo" RibbonStyle="SmallWithText"/>
+        <dxb:BarButtonItemLink BarItemName="btnPrint" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+      <dxr:RibbonPageGroup Name="rpgQuit" AllowCollapse="False">
+        <dxb:BarButtonItemLink BarItemName="btnQuitxyz" RibbonStyle="Large" UserGlyphSize="Large" BarItemDisplayMode="ContentAndGlyph" AllowDrop="True" />
+      </dxr:RibbonPageGroup>
+    </dxr:RibbonPage>
+  </ruc:RibbonUserControl.UserPages>
+  <dxg:GridControl Name="GcMat" ShowBorder="True" ItemsSource="{Binding Path=AprMat}" SelectionMode="Row">
+    <dxg:GridControl.View>
+      <dxg:TableView NavigationStyle="Row" AllowEditing="False"  ShowGroupPanel="false" AllowGrouping="false" AutoWidth="True" UseEvenRowBackground="False"/>
+    </dxg:GridControl.View>
+    <dxg:GridControl.Columns>
+      <dxg:GridColumn FieldName="AendDatum" Header="Дата изм." MinWidth="35" Width="35" EditSettings="{dxe:TextSettings DisplayFormat = dd.MM.yyyy HH:mm}"/>
+      <dxg:GridColumn FieldName="Bezeichnung" Header="Лок №" MinWidth="200" Width="200" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="BundleBez" Header="№ Пакета"  MinWidth="100" Width="100" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="AnnealingLot" Header="Ст. Партия" MinWidth="80" Width="80" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="AnnealingLotSeqNo" Header="№ в Ст. партии" MinWidth="70" Width="70" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="ErpChargenr" Header="Партия ERP" MinWidth="90" Width="90" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="Gew" Header="Вес кг." MinWidth="90" Width="90" EditSettings="{dxe:TextSettings DisplayFormat=d}" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="Dicke" Header="Толщина мм" MinWidth="80" Width="80" EditSettings="{dxe:TextSettings DisplayFormat=n2}" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="Breite" Header="Ширина мм" MinWidth="80" Width="80" EditSettings="{dxe:TextSettings DisplayFormat=d}" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="Laenge" Header="Длина м" MinWidth="80" Width="80" EditSettings="{dxe:TextSettings DisplayFormat=n2}" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="ErpMaterialnr" Header="ОЗМ"  MinWidth="150" Width="150" ReadOnly="True"/>
+      <dxg:GridColumn FieldName="Feldbez" Header="Склад"  MinWidth="70" Width="70" ReadOnly="True"/>
+    </dxg:GridControl.Columns>
+  </dxg:GridControl>
+</ruc:RibbonUserControl>
