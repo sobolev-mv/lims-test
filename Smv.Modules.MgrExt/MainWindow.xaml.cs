@@ -13,13 +13,12 @@ using System.Windows.Threading;
 using DevExpress.Xpf.Bars;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Ribbon;
-using Microsoft.VisualBasic.ApplicationServices;
 using Smv.App.Config;
 using Smv.Mef.Contracts;
 using Smv.RibbonUserUI;
 using Smv.Utils;
 using ShutdownMode = System.Windows.ShutdownMode;
-using StartupEventArgs = Microsoft.VisualBasic.ApplicationServices.StartupEventArgs;
+
 
 namespace Smv.Modules.MgrExt
 {
@@ -49,9 +48,10 @@ namespace Smv.Modules.MgrExt
     [STAThread]
     public static void Main(string[] args)
     {
-      //Create our new single-instance manager
-      var manager = new SingleInstanceManager();
-      manager.Run(args); 
+      Application app = new Viz.MagLab.Main.App();
+      app.DispatcherUnhandledException += AppDispatcherUnhandledException;
+      app.ShutdownMode = ShutdownMode.OnMainWindowClose;
+      app.Run(new MainWindow());
     }
 
     private void Window_Closed(object sender, EventArgs e)
@@ -146,6 +146,13 @@ namespace Smv.Modules.MgrExt
       
     }
 
+    private static void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+      MessageBox.Show(e.Exception.Message + "\r\n" + e.Exception.Source + "r\n" + e.Exception.StackTrace);
+      e.Handled = true;
+    }
+
+
     private void DXRibbonWindow_ContentRendered(object sender, EventArgs e)
     {
       stiModuleVersion623510.Content = "...";
@@ -230,44 +237,5 @@ namespace Smv.Modules.MgrExt
       
     }
   }
-
-
-  /// <summary>
-  /// Interaction logic for Window1.xaml
-  /// </summary>
-  internal class SingleInstanceManager : WindowsFormsApplicationBase
-  {
-    public SingleInstanceManager()
-    {
-      IsSingleInstance = true;
-    }
-
-    void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-    {
-      MessageBox.Show(e.Exception.Message +"\r\n" + e.Exception.Source + "r\n" + e.Exception.StackTrace);
-      e.Handled = true;
-    }
-
-    protected override bool OnStartup(StartupEventArgs eventArgs)
-    {
-      base.OnStartup(eventArgs);
-      Application app = new Viz.MagLab.Main.App();
-      app.DispatcherUnhandledException += AppDispatcherUnhandledException; 
-      app.ShutdownMode = ShutdownMode.OnMainWindowClose;
-      app.Run(new MainWindow());
-      return false;
-    }
-
-    protected override void OnStartupNextInstance(StartupNextInstanceEventArgs eventArgs)
-    {
-      base.OnStartupNextInstance(eventArgs);
-      string args = eventArgs.CommandLine.Aggregate(Environment.NewLine, (current, arg) => current + (Environment.NewLine + arg));
-      string msg = string.Format("New instance started with {0} args.{1}", eventArgs.CommandLine.Count, args);
-      MessageBox.Show(msg);
-    }
-  }
-
-
-
 
 }
