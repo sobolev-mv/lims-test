@@ -98,6 +98,7 @@ Title="Менеджер модулей расширения/Manager of work modu
               <sys:String>VS2017Dark</sys:String>
               <sys:String>VS2017Light</sys:String>
               <sys:String>TouchlineDark</sys:String>
+              <sys:String>Win10Light</sys:String>
             </dxe:ComboBoxEditSettings.Items>
           </dxe:ComboBoxEditSettings>
         </dxb:BarEditItem.EditSettings>
